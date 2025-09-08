@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活動公告 - 娛樂城</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', '微軟正黑體', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* 導覽列樣式 */
+        header {
+            background: linear-gradient(90deg, #000428 0%, #004e92 100%);
+            padding: 15px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            margin-bottom: 15px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover, nav a.active {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            background: linear-gradient(45deg, #ee5a24, #ff6b6b);
+        }
+
+        /* 主要內容 */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        /* 置頂公告 */
+        .top-announcement {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(255, 107, 107, 0.8); }
+            100% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.5); }
+        }
+
+        .top-announcement h2 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        /* 活動分類標籤 */
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .category-tab {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-tab:hover, .category-tab.active {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(45deg, #764ba2, #667eea);
+        }
+
+        /* 活動卡片 */
+        .announcements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .announcement-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .announcement-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .announcement-card:hover::before {
+            left: 100%;
+        }
+
+        .announcement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .announcement-type {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #000;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .announcement-date {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .announcement-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .announcement-content {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .announcement-details {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .detail-label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .detail-value {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .read-more-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .read-more-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* 熱門活動區域 */
+        .hot-activities {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .hot-title {
+            text-align: center;
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 25px;
+        }
+
+        .hot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .hot-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .hot-card:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .hot-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .hot-card-title {
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* 狀態標籤 */
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .status-active {
+            background: linear-gradient(45deg, #00ff00, #32cd32);
+            color: #000;
+        }
+
+        .status-ending {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: #fff;
+        }
+
+        .status-upcoming {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: #fff;
+        }
+
+        /* 倒數計時器 */
+        .countdown-timer {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .countdown-numbers {
+            font-size: 1.2rem;
+            margin-top: 5px;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .announcements-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-tabs {
+                gap: 10px;
+            }
+            
+            .category-tab {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .hot-activities {
+                padding: 25px 20px;
+            }
+            
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+
+        /* 隱藏/顯示活動類別 */
+        .announcement-card[data-category]:not([data-category="all"]) {
+            display: none;
+        }
+
+        .announcement-card[data-category="all"] {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 導覽列 -->
+    <header>
+        <h1> 娛樂城 </h1>
+        <nav>
+            <a href="index.html">🏠 首頁</a>
+            <a href="login.html" id="login-link">👤 註冊/登入</a>
+            <a href="hot.html">🔥 熱門遊戲</a>
+            <a href="rule.html">📖 遊戲玩法</a>
+            <a href="active.html" class="active">📢 活動公告</a>
+            <a href="logout.php" id="logout-link" style="display:none;">🚪 登出</a>
+        </nav>
+        <div id="user-info-box" style="display:none; text-align:center; margin-top:10px;">
+            <span id="user-info" style="color:#ffd700; font-weight:bold;"></span><br>
+            <span id="user-wallet" style="color:#ffd700; font-weight:bold;"></span>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <h1 class="page-title">📢 最新活動公告 </h1>
+
+        <!-- 置頂重要公告 -->
+        <div class="top-announcement">
+            <h2>🚨 重要公告 🚨</h2>
+            <p>7月份超級回饋月活動火熱進行中！首儲送100%紅利，最高送NT$10,000，機不可失！</p>
+        </div>
+
+        <!-- 活動分類 -->
+        <div class="category-tabs">
+            <button class="category-tab active" onclick="filterAnnouncements('all')">全部活動</button>
+            <button class="category-tab" onclick="filterAnnouncements('bonus')">紅利優惠</button>
+            <button class="category-tab" onclick="filterAnnouncements('tournament')">競賽活動</button>
+            <button class="category-tab" onclick="filterAnnouncements('vip')">VIP專享</button>
+            <button class="category-tab" onclick="filterAnnouncements('system')">系統公告</button>
+        </div>
+
+        <!-- 熱門活動 -->
+        <div class="hot-activities">
+            <h2 class="hot-title">🔥 本月熱門活動 🔥</h2>
+            <div class="hot-grid">
+                <div class="hot-card">
+                    <div class="hot-icon">💰</div>
+                    <div class="hot-card-title">首儲100%紅利</div>
+                    <p>新會員首次儲值即享100%紅利回饋，最高送NT$10,000</p>
+                </div>
+                <div class="hot-card">
+                    <div class="hot-icon">🎰</div>
+                    <div class="hot-card-title">老虎機大賽</div>
+                    <p>參與老虎機錦標賽，總獎金池超過NT$50萬等你來拿</p>
+                </div>
+                <div class="hot-card">
+                    <div class="hot-icon">🏆</div>
+                    <div class="hot-card-title">每日簽到</div>
+                    <p>連續簽到7天即可獲得神秘大獎，還有額外紅利等著你</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 活動公告列表 -->
+        <div class="announcements-grid">
+            <!-- 紅利優惠活動 -->
+            <div class="announcement-card" data-category="bonus">
+                <div class="card-header">
+                    <span class="announcement-type">紅利優惠</span>
+                    <span class="announcement-date">2025-07-01</span>
+                </div>
+                <h3 class="announcement-title">
+                    💎 新會員專屬首儲優惠
+                    <span class="status-badge status-active">進行中</span>
+                </h3>
+                <div class="announcement-content">
+                    <p>歡迎新會員加入金牌娛樂城！首次儲值即享超值優惠，讓您的遊戲之旅從豐厚回饋開始！</p>
+                </div>
+                <div class="announcement-details">
+                    <div class="detail-item">
+                        <span class="detail-label">優惠內容：</span>
+                        <span class="detail-value">首儲100%紅利</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">最高金額：</span>
+                        <span class="detail-value">NT$10,000</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">流水要求：</span>
+                        <span class="detail-value">20倍</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">活動期間：</span>
+                        <span class="detail-value">長期有效</span>
+                    </div>
+                </div>
+                <button class="read-more-btn">查看詳情</button>
+            </div>
+
+            <!-- 競賽活動 -->
+            <div class="announcement-card" data-category="tournament">
+                <div class="card-header">
+                    <span class="announcement-type">競賽活動</span>
+                    <span class="announcement-date">2025-07-01</span>
+                </div>
+                <h3 class="announcement-title">
+                    🏆 老虎機錦標賽
+                    <span class="status-badge status-active">進行中</span>
+                </h3>
+                <div class="announcement-content">
+                    <p>史上最大規模老虎機錦標賽開始啦！超過50萬獎金池等你來挑戰，人人有獎，冠軍獨得10萬大獎！</p>
+                </div>
+                <div class="announcement-details">
+                    <div class="detail-item">
+                        <span class="detail-label">總獎金池：</span>
+                        <span class="detail-value">NT$500,000</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">參賽費用：</span>
+                        <span class="detail-value">免費</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">比賽時間：</span>
+                        <span class="detail-value">7/1 - 7/31</span>
+                    </div>
+                </div>
+                <div class="countdown-timer">
+                    <div>距離活動結束還有</div>
+                    <div class="countdown-numbers">29天 15小時 30分鐘</div>
+                </div>
+                <button class="read-more-btn">立即參加</button>
+            </div>
+
+            <!-- VIP專享 -->
+            <div class="announcement-card" data-category="vip">
+                <div class="card-header">
+                    <span class="announcement-type">VIP專享</span>
+                    <span class="announcement-date">2025-06-30</span>
+                </div>
+                <h3 class="announcement-title">
+                    👑 VIP會員專屬回饋
+                    <span class="status-badge status-active">進行中</span>
+                </h3>
+                <div class="announcement-content">
+                    <p>尊貴的VIP會員們，專屬回饋活動來啦！享受更高的紅利比例、專屬客服和獨家遊戲體驗。</p>
+                </div>
+                <div class="announcement-details">
+                    <div class="detail-item">
+                        <span class="detail-label">VIP紅利：</span>
+                        <span class="detail-value">最高18%</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">專屬客服：</span>
+                        <span class="detail-value">24/7專線</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">生日禮金：</span>
+                        <span class="detail-value">最高NT$8,888</span>
+                    </div>
+                </div>
+                <button class="read-more-btn">了解VIP</button>
+            </div>
+
+            <!-- 系統公告 -->
+            <div class="announcement-card" data-category="system">
+                <div class="card-header">
+                    <span class="announcement-type">系統公告</span>
+                    <span class="announcement-date">2025-06-29</span>
+                </div>
+                <h3 class="announcement-title">
+                    ⚙️ 系統維護通知
+                    <span class="status-badge status-upcoming">即將開始</span>
+                </h3>
+                <div class="announcement-content">
+                    <p>為了提供更好的遊戲體驗，我們將進行系統升級維護，期間部分功能可能暫時無法使用。</p>
+                </div>
+                <div class="announcement-details">
+                    <div class="detail-item">
+                        <span class="detail-label">維護時間：</span>
+                        <span class="detail-value">7/2 02:00-04:00</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">影響範圍：</span>
+                        <span class="detail-value">儲值提款功能</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">補償：</span>
+                        <span class="detail-value">免費遊戲金NT$100</span>
+                    </div>
+                </div>
+                <button class="read-more-btn">查看詳情</button>
+            </div>
+
+            <!-- 紅利優惠 -->
+            <div class="announcement-card" data-category="bonus">
+                <div class="card-header">
+                    <span class="announcement-type">紅利優惠</span>
+                    <span class="announcement-date">2025-06-28</span>
+                </div>
+                <h3 class="announcement-title">
+                    🎁 每日簽到送好禮
+                    <span class="status-badge status-active">進行中</span>
+                </h3>
+                <div class="announcement-content">
+                    <p>每天登入即可簽到領取獎勵，連續簽到還有額外驚喜！第7天更有神秘大獎等著你！</p>
+                </div>
+                <div class="announcement-details">
+                    <div class="detail-item">
+                        <span class="detail-label">每日獎勵：</span>
+                        <span class="detail-value">NT$10-100</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">連續7天：</span>
+                        <span class="detail-value">神秘大獎</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">重置時間：</span>
+                        <span class="detail-value">每日00:00</span>
+                    </div>
+                </div>
+                <button class="read-more-btn">立即簽到</button>
+            </div>
+
+            <!-- 競賽活動 -->
+            <div class="announcement-card" data-category="tournament">
+                <div class="card-header">
+                    <span class="announcement-type">競賽活動</span>
+                    <span class="announcement-date">2025-06-27</span>
+                </div>
+                <h3 class="announcement-title">
+                    🃏 百家樂高手賽
+                    <span class="status-badge status-ending">即將結束</span>
+                </h3>
+                <div class="announcement-content">
+                    <p>百家樂高手們的終極對決！比拚技巧與運氣，爭奪最高榮譽和豐厚獎金！</p>
+                </div>
+                <div class="announcement-details">
+                    <div class="detail-item">
+                        <span class="detail-label">冠軍獎金：</span>
+                        <span class="detail-value">NT$50,000</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">參賽門檻：</span>
+                        <span class="detail-value">VIP等級3以上</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">結束時間：</span>
+                        <span class="detail-value">7/1 23:59</span>
+                    </div>
+                </div>
+                <div class="countdown-timer">
+                    <div>距離報名截止還有</div>
+                    <div class="countdown-numbers">12小時 25分鐘</div>
+                </div>
+                <button class="read-more-btn">快速報名</button>
+            </div>
+
+            <!-- VIP專享 -->
+            <div class="announcement-card" data-category="vip">
+                <div class="card-header">
+                    <span class="announcement-type">VIP專享</span>
+                    <span class="announcement-date">2025-06-26</span>
+                </div>
+                <h3 class="announcement-title">
+                    💳 VIP專屬信用卡
+                    <span class="status-badge status-active">進行中</span>
+                </h3>
+                <div class="announcement-content">
+                    <p>金牌娛樂城與知名銀行合作推出VIP專屬信用卡，享受更多金融優惠和遊戲回饋！</p>
+                </div>
+                <div class="announcement-details">
+                    <div class="detail-item">
+                        <span class="detail-label">年費：</span>
+                        <span class="detail-value">終身免年費</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">遊戲回饋：</span>
+                        <span class="detail-value">3%現金回饋</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">申請條件：</span>
+                        <span class="detail-value">VIP等級5以上</span>
+                    </div>
+                </div>
+                <button class="read-more-btn">立即申請</button>
+            </div>
+
+            <!-- 系統公告 -->
+            <div class="announcement-card" data-category="system">
+                <div class="card-header">
+                    <span class="announcement-type">系統公告</span>
+                    <span class="announcement-date">2025-06-25</span>
+                </div>
+                <h3 class="announcement-title">
+                    🔒 安全升級完成
+                    <span class="status-badge status-active">已完成</span>
+                </h3>
+                <div class="announcement-content">
+                    <p>我們已完成最新的安全系統升級，進一步保護玩家的資金和個人資料安全。</p>
+                </div>
+                <div class="announcement-details">
+                    <div class="detail-item">
+                        <span class="detail-label">升級內容：</span>
+                        <span class="detail-value">雙重認證系統</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">加密強度：</span>
+                        <span class="detail-value">AES-256</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">完成時間：</span>
+                        <span class="detail-value">2025-06-25</span>
+                    </div>
+                </div>
+                <button class="read-more-btn">安全說明</button>
+            </div>
+
+            <!-- 紅利優惠 -->
+            <div class="announcement-card" data-category="bonus">
+                <div class="card-header">
+                    <span class="announcement-type">紅利優惠</span>
+                    <span class="announcement-date">2025-06-24</span>
+                </div>
+                <h3 class="announcement-title">
+                    🌙 夜貓子專屬優惠
+                    <span class="status-badge status-active">進行中</span>
+                </h3>
+                <div class="announcement-content">
+                    <p>深夜遊戲更有趣！凌晨時段遊戲享受額外紅利，夜貓子玩家的專屬福利！</p>
+                </div>
+                <div class="announcement-details">
+                    <div class="detail-item">
+                        <span class="detail-label">優惠時段：</span>
+                        <span class="detail-value">00:00-06:00</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">額外紅利：</span>
+                        <span class="detail-value">5%</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">適用遊戲：</span>
+                        <span class="detail-value">全部遊戲</span>
+                    </div>
+                </div>
+                <button class="read-more-btn">立即體驗</button>
+            </div>
+        </div>
+
+        <!-- 聯絡資訊 -->
+        <div style="text-align: center; margin-top: 40px; padding: 30px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); border-radius: 15px;">
+            <h3 style="color: #ffd700; margin-bottom: 20px;">📞 需要幫助？</h3>
+            <p style="margin-bottom: 20px;">如有任何疑問或需要協助，請隨時聯絡我們的客服團隊</p>
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <a href="#" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); color: white; text-decoration: none; padding: 12px 25px; border-radius: 25px; transition: all 0.3s ease;">💬 Line客服</a>
+                <a href="#" style="background: linear-gradient(45deg, #667eea, #764ba2); color: white; text-decoration: none; padding: 12px 25px; border-radius: 25px; transition: all 0.3s ease;">📧 Email客服</a>
+                <a href="#" style="background: linear-gradient(45deg, #ffd700, #ffed4e); color: black; text-decoration: none; padding: 12px 25px; border-radius: 25px; transition: all 0.3s ease;">📞 電話客服</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function filterAnnouncements(category) {
+            // 移除所有按鈕的active狀態
+            const buttons = document.querySelectorAll('.category-tab');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // 設定點擊按鈕為active
+            event.target.classList.add('active');
+            
+            // 獲取所有公告卡片
+            const announcementCards = document.querySelectorAll('.announcement-card');
+            
+            announcementCards.forEach(card => {
+                if (category === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    if (card.getAttribute('data-category') === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        // 倒數計時器更新
+        function updateCountdown() {
+            const countdownElements = document.querySelectorAll('.countdown-numbers');
+            countdownElements.forEach(element => {
+                // 這裡可以加入實際的倒數計時邏輯
+                // 目前只是示例文字
+            });
+        }
+
+        // 公告卡片點擊效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const readMoreButtons = document.querySelectorAll('.read-more-btn');
+            readMoreButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const cardTitle = this.closest('.announcement-card').querySelector('.announcement-title').textContent.trim();
+                    alert(`您正在查看：${cardTitle}\n\n詳細內容將在新頁面中顯示，敬請期待！`);
+                });
+            });
+
+            // 每秒更新倒數計時
+            setInterval(updateCountdown, 1000);
+        });
+
+        fetch('login_status.php')
+        .then(res => res.json())
+        .then(data => {
+            if (data.logged_in) {
+                document.getElementById('login-link').style.display = 'none';
+                document.getElementById('logout-link').style.display = 'inline-block';
+                document.getElementById('user-info-box').style.display = 'block';
+                document.getElementById('user-info').textContent = `您好，${data.username}`;
+                fetch('wallet.php')
+                .then(res => res.json())
+                .then(w => {
+                    document.getElementById('user-wallet').textContent = `餘額：NT$${w.balance}`;
+                    document.getElementById('wallet-info').textContent = '';
+                });
+            } else {
+                document.getElementById('login-link').style.display = 'inline-block';
+                document.getElementById('logout-link').style.display = 'none';
+                document.getElementById('user-info-box').style.display = 'none';
+                document.getElementById('wallet-info').textContent = '';
+            }
+        });
+    </script>
+</body>
+
+</html>

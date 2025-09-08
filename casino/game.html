@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21點遊戲</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f4c3a, #2d8a5f);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .game-container {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .hand {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hand h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.2em;
+        }
+
+        .cards {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            width: 60px;
+            height: 90px;
+            background: white;
+            color: black;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border: 2px solid #ddd;
+        }
+
+        .card.red {
+            color: #d32f2f;
+        }
+
+        .card.hidden {
+            background: #2c5282;
+            color: white;
+        }
+
+        .score {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .hit-btn {
+            background: #4caf50;
+            color: white;
+        }
+
+        .hit-btn:hover:not(:disabled) {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .stand-btn {
+            background: #f44336;
+            color: white;
+        }
+
+        .stand-btn:hover:not(:disabled) {
+            background: #da190b;
+            transform: translateY(-2px);
+        }
+
+        .new-game-btn {
+            background: #ffd700;
+            color: black;
+        }
+
+        .new-game-btn:hover {
+            background: #ffed4e;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .message {
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .win {
+            background: rgba(76, 175, 80, 0.3);
+            border: 2px solid #4caf50;
+        }
+
+        .lose {
+            background: rgba(244, 67, 54, 0.3);
+            border: 2px solid #f44336;
+        }
+
+        .tie {
+            background: rgba(255, 193, 7, 0.3);
+            border: 2px solid #ffc107;
+        }
+
+        .home-btn {
+            background: #6c757d;
+            /* 灰色背景 */
+            color: white;
+            /* 白色文字 */
+            border: 2px solid #5a6268;
+        }
+
+        .home-btn:hover {
+            background: #5a6268;
+            /* 懸停時變深 */
+            transform: translateY(-2px);
+            /* 輕微上浮效果 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            /* 陰影效果 */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game-container">
+        <h1>🎰 21點遊戲 (Blackjack)</h1>
+        <div style="text-align:center; margin-bottom:20px;">
+            <span id="wallet-info" style="color:#ffd700; font-weight:bold;">餘額：--</span>
+        </div>
+        <div style="text-align:center; margin-bottom:20px;">
+            <label for="bet-amount" style="color:#ffd700; font-weight:bold;">下注金額：</label>
+            <input type="number" id="bet-amount" min="10" step="10" value="100" style="width:100px;">
+            <button id="bet-btn" onclick="placeBet()" style="margin-left:10px;">下注</button>
+        </div>
+        <div class="game-area">
+            <div class="hand">
+                <h3>🏠 莊家</h3>
+                <div class="cards" id="dealer-cards"></div>
+                <div class="score" id="dealer-score">分數: ?</div>
+            </div>
+            <div class="hand">
+                <h3>🎮 玩家</h3>
+                <div class="cards" id="player-cards"></div>
+                <div class="score" id="player-score">分數: 0</div>
+            </div>
+        </div>
+        <div class="message" id="game-message" style="display: none;"></div>
+        <div class="controls">
+            <button class="hit-btn" id="hit-btn" onclick="hit()" disabled>要牌 (Hit)</button>
+            <button class="stand-btn" id="stand-btn" onclick="stand()" disabled>停牌 (Stand)</button>
+            <button class="new-game-btn" onclick="newGame()">新遊戲</button>
+            <a href="index.html"><button class="home-btn"  onclick="goHome()">🏠 返回首頁</button></a>
+        </div>
+    </div>
+    <script>
+        // 補上牌組定義
+        const suits = ['♠', '♥', '♦', '♣'];
+        const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return '';
+        }
+
+        let username = getCookie('username');
+        let walletBalance = 0; // 初始為0，需從後端取得
+        let deck = [];
+        let playerHand = [];
+        let dealerHand = [];
+        let gameOver = false;
+        let dealerHidden = true;
+        let betAmount = 100;
+
+        function fetchWallet() {
+            // 從後端取得最新餘額
+            fetch('wallet.php')
+            .then(res => res.json())
+            .then(data => {
+                walletBalance = parseFloat(data.balance) || 0;
+                document.getElementById('wallet-info').textContent = `餘額：NT$${walletBalance}`;
+            });
+        }
+
+        function setBet() {
+            const betInput = document.getElementById('bet-amount');
+            let val = parseInt(betInput.value, 10);
+            if (isNaN(val) || val < 10) val = 10;
+            if (val > walletBalance) {
+                alert('餘額不足，請重新設定下注金額');
+                betInput.value = walletBalance;
+                return;
+            }
+            betAmount = val;
+            betInput.value = betAmount;
+        }
+
+        function createDeck() {
+            deck = [];
+            for (let suit of suits) {
+                for (let rank of ranks) {
+                    deck.push({
+                        suit: suit,
+                        rank: rank,
+                        value: getCardValue(rank)
+                    });
+                }
+            }
+            shuffleDeck();
+        }
+
+        function shuffleDeck() {
+            for (let i = deck.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+
+        function getCardValue(rank) {
+            if (rank === 'A') return 11;
+            if (['J', 'Q', 'K'].includes(rank)) return 10;
+            return parseInt(rank);
+        }
+
+        function calculateHandValue(hand) {
+            let value = 0;
+            let aces = 0;
+
+            for (let card of hand) {
+                value += card.value;
+                if (card.rank === 'A') aces++;
+            }
+
+            // 處理A的軟牌和硬牌邏輯
+            while (value > 21 && aces > 0) {
+                value -= 10; // 將A從11改為1
+                aces--;
+            }
+
+            return value;
+        }
+
+        function dealCard() {
+            return deck.pop();
+        }
+
+        function displayHand(hand, elementId, hideFirst = false) {
+            const container = document.getElementById(elementId);
+            container.innerHTML = '';
+
+            hand.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+
+                if (hideFirst && index === 0) {
+                    cardElement.className += ' hidden';
+                    cardElement.textContent = '?';
+                } else {
+                    if (card.suit === '♥' || card.suit === '♦') {
+                        cardElement.className += ' red';
+                    }
+                    cardElement.textContent = card.rank + card.suit;
+                }
+
+                container.appendChild(cardElement);
+            });
+        }
+
+        function updateScores() {
+            const playerScore = calculateHandValue(playerHand);
+            document.getElementById('player-score').textContent = `分數: ${playerScore}`;
+
+            if (dealerHidden) {
+                document.getElementById('dealer-score').textContent = '分數: ?';
+            } else {
+                const dealerScore = calculateHandValue(dealerHand);
+                document.getElementById('dealer-score').textContent = `分數: ${dealerScore}`;
+            }
+        }
+
+        function hit() {
+            if (gameOver) return;
+
+            playerHand.push(dealCard());
+            displayHand(playerHand, 'player-cards');
+            updateScores();
+
+            // 檢查是否爆牌
+            if (calculateHandValue(playerHand) > 21) {
+                endGame('玩家爆牌！莊家勝利！', 'lose');
+            }
+        }
+
+        function stand() {
+            if (gameOver) return;
+
+            // 顯示莊家的隱藏牌
+            dealerHidden = false;
+            displayHand(dealerHand, 'dealer-cards');
+            updateScores();
+
+            // 莊家自動要牌邏輯
+            dealerPlay();
+        }
+
+        function dealerPlay() {
+            const dealerPlayInterval = setInterval(() => {
+                const dealerScore = calculateHandValue(dealerHand);
+
+                if (dealerScore < 17) {
+                    dealerHand.push(dealCard());
+                    displayHand(dealerHand, 'dealer-cards');
+                    updateScores();
+                } else {
+                    clearInterval(dealerPlayInterval);
+                    determineWinner();
+                }
+            }, 1000);
+        }
+
+        function determineWinner() {
+            const playerScore = calculateHandValue(playerHand);
+            const dealerScore = calculateHandValue(dealerHand);
+
+            let message, messageClass;
+
+            if (dealerScore > 21) {
+                message = '莊家爆牌！玩家勝利！';
+                messageClass = 'win';
+            } else if (playerScore > dealerScore) {
+                message = '玩家勝利！';
+                messageClass = 'win';
+            } else if (dealerScore > playerScore) {
+                message = '莊家勝利！';
+                messageClass = 'lose';
+            } else {
+                message = '平手！';
+                messageClass = 'tie';
+            }
+
+            endGame(message, messageClass);
+        }
+
+        function endGame(message, messageClass) {
+            gameOver = true;
+            dealerHidden = false;
+            const messageElement = document.getElementById('game-message');
+            messageElement.textContent = message;
+            messageElement.className = `message ${messageClass}`;
+            messageElement.style.display = 'block';
+            document.getElementById('hit-btn').disabled = true;
+            document.getElementById('stand-btn').disabled = true;
+            displayHand(dealerHand, 'dealer-cards');
+            updateScores();
+
+            // 判斷勝負並更新餘額
+            let result;
+            const playerScore = calculateHandValue(playerHand);
+            const dealerScore = calculateHandValue(dealerHand);
+            if (messageClass === 'win') {
+                result = 'win';
+                walletBalance += betAmount;
+            } else if (messageClass === 'lose') {
+                result = 'lose';
+                walletBalance -= betAmount;
+            } else {
+                result = 'tie';
+                // 不變
+            }
+            document.getElementById('wallet-info').textContent = `餘額：NT$${walletBalance}`;
+
+            // 更新 cookie 餘額
+            document.cookie = `wallet_balance=${walletBalance}; path=/`;
+
+            // 回傳遊戲記錄與餘額（包含帳號）
+            fetch('record_game.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    username: username,
+                    bet: betAmount,
+                    result: result,
+                    player: playerScore,
+                    dealer: dealerScore,
+                    balance: walletBalance
+                })
+            })
+            .then(res => res.text())
+            .then(msg => {
+                fetchWallet();
+            });
+        }
+
+        function hideHands() {
+            document.getElementById('dealer-cards').innerHTML = '';
+            document.getElementById('player-cards').innerHTML = '';
+            document.getElementById('dealer-score').textContent = '分數: ?';
+            document.getElementById('player-score').textContent = '分數: 0';
+        }
+
+        function placeBet() {
+            // 設定下注金額
+            const betInput = document.getElementById('bet-amount');
+            let val = parseInt(betInput.value, 10);
+            if (isNaN(val) || val < 10) val = 10;
+            if (val > walletBalance) {
+                alert('餘額不足，請重新設定下注金額');
+                betInput.value = walletBalance;
+                return;
+            }
+            betAmount = val;
+            betInput.value = betAmount;
+
+            // 隱藏手牌
+            hideHands();
+            // 禁用下注按鈕，啟用要牌/停牌
+            document.getElementById('bet-btn').disabled = true;
+            document.getElementById('hit-btn').disabled = false;
+            document.getElementById('stand-btn').disabled = false;
+            // 顯示手牌
+            displayHand(playerHand, 'player-cards');
+            displayHand(dealerHand, 'dealer-cards', true);
+            updateScores();
+            alert('下注成功！');
+        }
+
+        function newGame() {
+            playerHand = [];
+            dealerHand = [];
+            gameOver = false;
+            dealerHidden = true;
+            document.getElementById('game-message').style.display = 'none';
+            document.getElementById('hit-btn').disabled = true;
+            document.getElementById('stand-btn').disabled = true;
+            document.getElementById('bet-btn').disabled = false;
+            createDeck();
+            playerHand.push(dealCard(), dealCard());
+            dealerHand.push(dealCard(), dealCard());
+            hideHands();
+            fetchWallet();
+            // 檢查是否有天然21點
+            if (calculateHandValue(playerHand) === 21) {
+                if (calculateHandValue(dealerHand) === 21) {
+                    dealerHidden = false;
+                    endGame('雙方都是21點！平手！', 'tie');
+                } else {
+                    dealerHidden = false;
+                    endGame('玩家21點！玩家勝利！', 'win');
+                }
+            }
+        }
+
+        function goHome() {
+            // 顯示確認對話框，防止意外離開
+            const confirmLeave = confirm('確定要離開遊戲返回首頁嗎？\n當前遊戲進度將會遺失。');
+
+        }
+
+        // 啟動遊戲
+        newGame();
+    </script>
+</body>
+
+</html>

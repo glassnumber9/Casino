@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊戲玩法 - 娛樂城</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', '微軟正黑體', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* 導覽列樣式 */
+        header {
+            background: linear-gradient(90deg, #000428 0%, #004e92 100%);
+            padding: 15px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            margin-bottom: 15px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover, nav a.active {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            background: linear-gradient(45deg, #ee5a24, #ff6b6b);
+        }
+
+        /* 主要內容 */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        /* 遊戲規則卡片 */
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .rule-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .rule-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .rule-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .rule-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .rule-content {
+            line-height: 1.8;
+        }
+
+        .rule-content h4 {
+            color: #ff6b6b;
+            margin: 20px 0 10px 0;
+            font-size: 1.2rem;
+        }
+
+        .rule-content ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .rule-content li {
+            margin-bottom: 8px;
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        /* 新手指南 */
+        .beginner-guide {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .guide-title {
+            text-align: center;
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 30px;
+        }
+
+        .guide-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .step-icon {
+            font-size: 2.5rem;
+            margin: 15px 0;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        /* FAQ區域 */
+        .faq-section {
+            margin-top: 40px;
+        }
+
+        .faq-title {
+            text-align: center;
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 30px;
+        }
+
+        .faq-item {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 20px;
+            background: rgba(255, 107, 107, 0.2);
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 107, 107, 0.3);
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        .faq-answer.active {
+            padding: 20px;
+            max-height: 200px;
+        }
+
+        .faq-toggle {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-toggle.active {
+            transform: rotate(180deg);
+        }
+
+        /* 賠率表 */
+        .odds-table {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .odds-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .odds-table th,
+        .odds-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .odds-table th {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            font-weight: bold;
+        }
+
+        .odds-table td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .rules-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .guide-steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .rule-card,
+            .beginner-guide {
+                padding: 25px 20px;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .guide-title,
+            .faq-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 導覽列 -->
+    <header>
+        <h1> 娛樂城 </h1>
+        <nav>
+            <a href="index.html">🏠 首頁</a>
+            <a href="login.html" id="login-link">👤 註冊/登入</a>
+            <a href="hot.html">🔥 熱門遊戲</a>
+            <a href="rule.html" class="active">📖 遊戲玩法</a>
+            <a href="active.html">📢 活動公告</a>
+            <a href="logout.php" id="logout-link" style="display:none;">🚪 登出</a>
+        </nav>
+        <div id="user-info-box" style="display:none; text-align:center; margin-top:10px;">
+            <span id="user-info" style="color:#ffd700; font-weight:bold;"></span><br>
+            <span id="user-wallet" style="color:#ffd700; font-weight:bold;"></span>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <h1 class="page-title">📖 遊戲玩法指南 📖</h1>
+
+        <!-- 新手指南 -->
+        <div class="beginner-guide">
+            <h2 class="guide-title">🎯 新手入門指南 🎯</h2>
+            <div class="guide-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">👤</div>
+                    <div class="step-title">註冊帳號</div>
+                    <p>填寫基本資料，完成手機驗證，即可開始遊戲之旅</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">💰</div>
+                    <div class="step-title">首次儲值</div>
+                    <p>選擇適合的付款方式，享受首儲100%紅利優惠</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-title">選擇遊戲</div>
+                    <div class="step-icon">🎮</div>
+                    <p>從50+種遊戲中選擇您喜愛的，開始精彩體驗</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-icon">🏆</div>
+                    <div class="step-title">開始獲勝</div>
+                    <p>運用策略和運氣，贏取豐厚獎金，享受勝利喜悅</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 遊戲規則 -->
+        <div class="rules-grid">
+            <!-- 老虎機規則 -->
+            <div class="rule-card">
+                <div class="rule-icon">🎰</div>
+                <h3 class="rule-title">老虎機遊戲規則</h3>
+                <div class="rule-content">
+                    <h4>🎯 遊戲目標</h4>
+                    <p>轉動捲軸，讓相同的符號在支付線上排列，即可獲得相應獎金。</p>
+                    
+                    <h4>🎮 遊戲玩法</h4>
+                    <ul>
+                        <li>選擇投注金額和支付線數量</li>
+                        <li>點擊「轉動」按鈕開始遊戲</li>
+                        <li>等待捲軸停止，查看獲獎結合</li>
+                        <li>獲勝時，獎金會自動加入您的帳戶</li>
+                    </ul>
+                    
+                    <h4>💎 特殊符號</h4>
+                    <ul>
+                        <li><span class="highlight">Wild符號</span>：可替代任何普通符號</li>
+                        <li><span class="highlight">Scatter符號</span>：觸發免費旋轉</li>
+                        <li><span class="highlight">Bonus符號</span>：進入獎金遊戲</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 21點規則 -->
+            <div class="rule-card">
+                <div class="rule-icon">🃏</div>
+                <h3 class="rule-title">21點遊戲規則</h3>
+                <div class="rule-content">
+                    <h4>🎯 遊戲目標</h4>
+                    <p>使手牌點數接近或等於21點，但不能超過21點，同時要比莊家的點數大。</p>
+                    
+                    <h4>🃏 牌值計算</h4>
+                    <ul>
+                        <li>A可算作1點或11點（對玩家最有利）</li>
+                        <li>K、Q、J 各算10點</li>
+                        <li>其他牌按面值計算</li>
+                    </ul>
+                    
+                    <h4>🎮 遊戲流程</h4>
+                    <ul>
+                        <li>莊家和玩家各發2張牌</li>
+                        <li>玩家可選擇「要牌」或「停牌」</li>
+                        <li>莊家16點以下必須要牌，17點以上停牌</li>
+                        <li>比較點數，決定勝負</li>
+                    </ul>
+
+                    <div class="odds-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>結果</th>
+                                    <th>賠率</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>一般獲勝</td>
+                                    <td>1:1</td>
+                                </tr>
+                                <tr>
+                                    <td>BlackJack</td>
+                                    <td>3:2</td>
+                                </tr>
+                                <tr>
+                                    <td>保險</td>
+                                    <td>2:1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 百家樂規則 -->
+            <div class="rule-card">
+                <div class="rule-icon">🎭</div>
+                <h3 class="rule-title">百家樂遊戲規則</h3>
+                <div class="rule-content">
+                    <h4>🎯 遊戲目標</h4>
+                    <p>預測「莊家」或「閒家」哪一方的牌面總點數較接近9點。</p>
+                    
+                    <h4>🃏 牌值計算</h4>
+                    <ul>
+                        <li>A = 1點</li>
+                        <li>2-9 = 面值點數</li>
+                        <li>10、J、Q、K = 0點</li>
+                        <li>總點數超過9時，只取個位數</li>
+                    </ul>
+                    
+                    <h4>🎮 投注選項</h4>
+                    <ul>
+                        <li><span class="highlight">莊家勝</span>：賠率 1:0.95</li>
+                        <li><span class="highlight">閒家勝</span>：賠率 1:1</li>
+                        <li><span class="highlight">和局</span>：賠率 1:8</li>
+                    </ul>
+                    
+                    <h4>📋 補牌規則</h4>
+                    <p>根據既定規則自動補牌，玩家無需做任何決定，只需預測結果。</p>
+                </div>
+            </div>
+
+            <!-- 骰寶規則 -->
+            <div class="rule-card">
+                <div class="rule-icon">🎲</div>
+                <h3 class="rule-title">骰寶遊戲規則</h3>
+                <div class="rule-content">
+                    <h4>🎯 遊戲目標</h4>
+                    <p>預測三顆骰子搖出後的點數組合，有多種投注方式可選擇。</p>
+                    
+                    <h4>🎮 投注類型</h4>
+                    <ul>
+                        <li><span class="highlight">大小</span>：總和4-10為小，11-17為大</li>
+                        <li><span class="highlight">單雙</span>：總和的奇偶性</li>
+                        <li><span class="highlight">總和</span>：預測三顆骰子的總和</li>
+                        <li><span class="highlight">單點</span>：預測某個數字出現次數</li>
+                        <li><span class="highlight">豹子</span>：三顆骰子相同數字</li>
+                    </ul>
+
+                    <div class="odds-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>投注類型</th>
+                                    <th>賠率</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>大/小、單/雙</td>
+                                    <td>1:1</td>
+                                </tr>
+                                <tr>
+                                    <td>單點（1次）</td>
+                                    <td>1:1</td>
+                                </tr>
+                                <tr>
+                                    <td>單點（2次）</td>
+                                    <td>1:2</td>
+                                </tr>
+                                <tr>
+                                    <td>單點（3次/豹子）</td>
+                                    <td>1:12</td>
+                                </tr>
+                                <tr>
+                                    <td>任意豹子</td>
+                                    <td>1:24</td>
+                                </tr>
+                                <tr>
+                                    <td>指定豹子</td>
+                                    <td>1:180</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 輪盤規則 -->
+            <div class="rule-card">
+                <div class="rule-icon">🎯</div>
+                <h3 class="rule-title">輪盤遊戲規則</h3>
+                <div class="rule-content">
+                    <h4>🎯 遊戲目標</h4>
+                    <p>預測小球會落在輪盤的哪個數字或區域上。</p>
+                    
+                    <h4>🎮 投注類型</h4>
+                    <ul>
+                        <li><span class="highlight">直注</span>：投注單一數字</li>
+                        <li><span class="highlight">分注</span>：投注兩個相鄰數字</li>
+                        <li><span class="highlight">街注</span>：投注一行三個數字</li>
+                        <li><span class="highlight">角注</span>：投注四個相鄰數字</li>
+                        <li><span class="highlight">紅/黑</span>：投注顏色</li>
+                        <li><span class="highlight">奇/偶</span>：投注奇偶性</li>
+                        <li><span class="highlight">大/小</span>：1-18為小，19-36為大</li>
+                    </ul>
+
+                    <div class="odds-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>投注類型</th>
+                                    <th>賠率</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>直注（單一數字）</td>
+                                    <td>1:35</td>
+                                </tr>
+                                <tr>
+                                    <td>分注（兩個數字）</td>
+                                    <td>1:17</td>
+                                </tr>
+                                <tr>
+                                    <td>街注（三個數字）</td>
+                                    <td>1:11</td>
+                                </tr>
+                                <tr>
+                                    <td>角注（四個數字）</td>
+                                    <td>1:8</td>
+                                </tr>
+                                <tr>
+                                    <td>紅/黑、奇/偶、大/小</td>
+                                    <td>1:1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 德州撲克規則 -->
+            <div class="rule-card">
+                <div class="rule-icon">♠️</div>
+                <h3 class="rule-title">德州撲克規則</h3>
+                <div class="rule-content">
+                    <h4>🎯 遊戲目標</h4>
+                    <p>用兩張底牌和五張公牌組成最佳的五張牌組合，擊敗其他玩家。</p>
+                    
+                    <h4>🃏 牌型排序（由大到小）</h4>
+                    <ul>
+                        <li><span class="highlight">皇家同花順</span>：A-K-Q-J-10同花色</li>
+                        <li><span class="highlight">同花順</span>：五張連續同花色牌</li>
+                        <li><span class="highlight">四條</span>：四張相同點數的牌</li>
+                        <li><span class="highlight">葫蘆</span>：三條加一對</li>
+                        <li><span class="highlight">同花</span>：五張相同花色的牌</li>
+                        <li><span class="highlight">順子</span>：五張連續點數的牌</li>
+                        <li><span class="highlight">三條</span>：三張相同點數的牌</li>
+                        <li><span class="highlight">兩對</span>：兩個不同的對子</li>
+                        <li><span class="highlight">一對</span>：兩張相同點數的牌</li>
+                        <li><span class="highlight">高牌</span>：沒有任何組合</li>
+                    </ul>
+                    
+                    <h4>🎮 遊戲流程</h4>
+                    <ul>
+                        <li>每位玩家發兩張底牌</li>
+                        <li>第一輪下注</li>
+                        <li>翻牌：發出三張公牌</li>
+                        <li>第二輪下注</li>
+                        <li>轉牌：發出第四張公牌</li>
+                        <li>第三輪下注</li>
+                        <li>河牌：發出第五張公牌</li>
+                        <li>最後一輪下注</li>
+                        <li>攤牌比較大小</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ區域 -->
+        <div class="faq-section">
+            <h2 class="faq-title">❓ 常見問題 Q&A ❓</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>如何開始遊戲？</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>首先需要註冊帳號並完成身份驗證，然後進行首次儲值。儲值完成後，您就可以選擇喜愛的遊戲開始體驗。建議新手先從簡單的遊戲開始，如老虎機或骰寶。</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>最低投注金額是多少？</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>不同遊戲的最低投注金額不同。老虎機最低NT$5起，21點NT$50起，百家樂NT$100起，骰寶NT$20起。詳細資訊請參考各遊戲頁面說明。</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>如何提高獲勝機率？</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>建議先熟悉遊戲規則，制定合理的投注策略，控制好資金管理。對於技巧型遊戲如21點和德州撲克，可以學習基本策略。最重要的是要理性遊戲，不要沉迷。</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>獎金什麼時候到帳？</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>遊戲獲勝的獎金會立即加入您的帳戶餘額。提款申請在審核通過後，通常在1-3個工作天內到帳，具體時間依銀行處理速度而定。</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>遊戲公平性如何保證？</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>我們使用經過認證的隨機數生成器（RNG），確保所有遊戲結果完全隨機公平。真人遊戲由專業荷官操作，全程高清直播，透明公正。</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>可以設定投注限額嗎？</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>可以！為了幫助玩家理性遊戲，我們提供每日、每週、每月的儲值和投注限額設定功能。您可以在帳戶設定中進行調整。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const toggle = element.querySelector('.faq-toggle');
+            
+            // 關閉其他開啟的FAQ
+            const allAnswers = document.querySelectorAll('.faq-answer');
+            const allToggles = document.querySelectorAll('.faq-toggle');
+            
+            allAnswers.forEach((item, index) => {
+                if (item !== answer) {
+                    item.classList.remove('active');
+                    allToggles[index].classList.remove('active');
+                }
+            });
+            
+            // 切換當前FAQ
+            answer.classList.toggle('active');
+            toggle.classList.toggle('active');
+        }
+
+fetch('login_status.php')
+.then(res => res.json())
+.then(data => {
+    if (data.logged_in) {
+        document.getElementById('login-link').style.display = 'none';
+        document.getElementById('logout-link').style.display = 'inline-block';
+        document.getElementById('user-info-box').style.display = 'block';
+        document.getElementById('user-info').textContent = `您好，${data.username}`;
+        fetch('wallet.php')
+        .then(res => res.json())
+        .then(w => {
+            document.getElementById('user-wallet').textContent = `餘額：NT$${w.balance}`;
+            document.getElementById('wallet-info').textContent = '';
+        });
+    } else {
+        document.getElementById('login-link').style.display = 'inline-block';
+        document.getElementById('logout-link').style.display = 'none';
+        document.getElementById('user-info-box').style.display = 'none';
+        document.getElementById('wallet-info').textContent = '';
+    }
+});
+    </script>
+</body>
+
+</html>
